@@ -55,7 +55,7 @@ struct Node* Insert(struct Node* node, const int key, int* height) {
         if (key < node->key) {
             node->left = Insert(node->left, key, height);
             // Factor of balance cases:
-            if (*height != NULL)
+            if (*height != 0)
                 switch (node->balance) {
                 case 1:
                     node->balance = 0;
@@ -99,9 +99,9 @@ struct Node* Insert(struct Node* node, const int key, int* height) {
         }
         // If the key to-be inserted is higher than the node, then we insert in the right subtree
         else if (key > node->key) {
-            node->right = insert(node->right, key, *height);
+            node->right = Insert(node->right, key, height);
             // *height right now is 1, right subtree height is higher
-            if (*height != NULL) {
+            if (*height != 0) {
                 // Factor of balance cases:
                 switch (node->balance) {
                 case -1:
@@ -147,4 +147,32 @@ struct Node* Insert(struct Node* node, const int key, int* height) {
         }
     }
     return node;
+}
+
+/* TRAVERSALS
+There are 4 Traversals: inOrder, preOrder, postOrder, levelOrder
+inOrder takes the route: left->root->right
+preOrder takes the route: root->left->right
+postOrder takes the route: left->right->root
+levelOrder takes the route per level
+
+We're going to use recursion for inOrder, preOrder, postOrder, and for levelOrder we are going to use the height function to get the current level of our tree
+*/
+
+void inOrder(struct Node* node) {
+    inOrder(node->left);
+    printf("%d ", node->key);
+    inOrder(node->right);
+}
+
+void preOrder(struct Node* node) {
+    printf("%d ", node->key);
+    preOrder(node->left);
+    preOrder(node->right);
+}
+
+void postOrder(struct Node* node) {
+    postOrder(node->left);
+    postOrder(node->right);
+    printf("%d ", node->key);
 }

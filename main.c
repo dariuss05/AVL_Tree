@@ -1,13 +1,15 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#define MAXNODES 100
+#include <time.h>
+#define MAXNODES 20
 
 /* Data structure for AVL Tree
 I'm using balance instead of height to complicate things */
 typedef struct Node {
     int key, balance;
     struct Node* left, * right;
-};
+}Node;
 
 int noBalanceCount = 0; // Counter variable for all the balances made;
 
@@ -160,19 +162,80 @@ We're going to use recursion for inOrder, preOrder, postOrder, and for levelOrde
 */
 
 void inOrder(struct Node* node) {
-    inOrder(node->left);
-    printf("%d ", node->key);
-    inOrder(node->right);
+    if (node != NULL) {
+        inOrder(node->left);
+        printf("%d ", node->key);
+        inOrder(node->right);
+    }
 }
 
 void preOrder(struct Node* node) {
-    printf("%d ", node->key);
-    preOrder(node->left);
-    preOrder(node->right);
+    if (node != NULL) {
+        printf("%d ", node->key);
+        preOrder(node->left);
+        preOrder(node->right);
+    }
 }
 
 void postOrder(struct Node* node) {
-    postOrder(node->left);
-    postOrder(node->right);
-    printf("%d ", node->key);
+    if (node != NULL) {
+        postOrder(node->left);
+        postOrder(node->right);
+        printf("%d ", node->key);
+    }
 }
+
+/* Function to get the current level of the tree */
+void currentLevel(struct Node* node, int level) {
+    if (node == NULL)
+        return;
+    if (level == 1)
+        printf("%d ", node->key);
+    else if (level > 1) {
+        currentLevel(node->left, level - 1);
+        currentLevel(node->right, level - 1);
+    }
+}
+
+void levelOrder(struct Node* node) {
+    int height = Height(node);
+    for (int i = 1; i <= height; i++)
+        currentLevel(node, i);
+}
+
+
+int main(int argc, char** argv) {
+    srand(time(NULL));
+    struct Node* node = NULL;
+    int key = 0, height = 0;
+
+    /* Generating 20 nodes between 0 and 100 */
+    for (int i = 0; i < MAXNODES; i++) {
+        key = rand() % 100;
+        node = Insert(node, key, &height);
+    }
+
+    /* Printing traversals */
+    
+    // inOrder
+    printf("inOrder traversal: "); inOrder(node);
+    printf("\n");
+
+    // postOrder
+    printf("postOrder traversal: "); postOrder(node);
+    printf("\n");
+
+    // preOrder
+    printf("preOrder traversal: "); preOrder(node);
+    printf("\n");
+
+    // levelOrder
+    printf("levelOrder traversal: "); levelOrder(node);
+    printf("\n");
+    
+
+    return 0;
+}
+
+
+

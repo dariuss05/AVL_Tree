@@ -4,8 +4,7 @@
 #include <time.h>
 #define MAXNODES 20
 
-/* Data structure for AVL Tree
-I'm using balance instead of height to complicate things */
+/* Data structure for AVL Tree */
 typedef struct Node {
     int key, balance;
     struct Node* left, * right;
@@ -210,15 +209,17 @@ int main(int argc, char** argv) {
     int key = 0, height = 0;
 
     /* Generating 20 nodes between 0 and 100 */
+    printf("initial insertion of keys: ");
     for (int i = 0; i < MAXNODES; i++) {
         key = rand() % 100;
         node = Insert(node, key, &height);
+        printf("%d ", key);
     }
 
     /* Printing traversals */
     
     // inOrder
-    printf("inOrder traversal: "); inOrder(node);
+    printf("\ninOrder traversal: "); inOrder(node);
     printf("\n");
 
     // postOrder
